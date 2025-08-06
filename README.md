@@ -46,26 +46,3 @@ Q7. 💬 "Please close claim CLM-001. Add the following closure note: 'Payment c
 ✅ Includes: claimId, closureNotes
 
 		
-		FSI Agentic - Insurance - Key Updates: (08/04 - IST)
-		 
-		Webapp link: FSI 2 Demo - Landing Page
-			1. Endpoint Integration:
-				○ Successfully integrated the endpoint for the Insurance scenario. (Follow below updated flow)
-				○ Note: Please ask only relevant questions to complete the flow. 
-					§ Avoid random or out-of-sequence questions.
-					§ Do not repeat prefilled questions already shown in the webapp UI (these need to be updated, Informed to Prince).
-			2. Response Enhancements:
-				○ Endpoint responses now include two new parameters: 
-					§ agent_name
-					§ tool_name
-				○ These help identify which agent/tool generated the response. 
-				○ Use browser inspection tools to view these parameters.
-				○ Plan needed to display them in the webapp UI (similar to how it's done in Stealth Hub).
-			3. Web App Updates require:
-				○  UI enhancements including an updated default message for the copilot.
-				○  Introduce a structured sequence of follow-up questions to guide user flow.
-				○  Create a dedicated subpage for Insurance Assistant, similar to the existing Retail Banking assistant page.
-		
-	
-	
-![Uploading image.png…]()
