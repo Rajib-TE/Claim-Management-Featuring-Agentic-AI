@@ -1,0 +1,30 @@
+{
+    "process": "Claims Management Process in Financial Services",
+    "description": "End-to-end workflow for processing insurance/financial claims: intake, validation, investigation, decision, payment, notification, closure.",
+    "prompts": [
+        {
+            "prompt": "Register a new claim for John Smith, contact john.smith@email.com, policy AUTO-123, rear-end collision.",
+            "description": "Tests claim registration with all required fields for a typical auto claim."
+        },
+        {
+            "prompt": "Start a health claim for Anne Lee, anne.lee@email.com, missing incident description.",
+            "description": "Triggers claim registration with incomplete data to prompt for missing information."
+        },
+        {
+            "prompt": "Validate claim CLM-002 and identify missing or invalid fields.",
+            "description": "Tests the validation agent's missing info detection and additional info request path."
+        },
+        {
+            "prompt": "Assign examiner for claim CLM-001 from auto examiner pool and begin investigation.",
+            "description": "Tests examiner assignment and investigation initiation for a valid, complete claim."
+        },
+        {
+            "prompt": "Process payment for claim CLM-005, amount $350, account INVALID123, routing XXXXXXX.",
+            "description": "Tests payment agent’s error handling and guidance for invalid payment details."
+        },
+        {
+            "prompt": "Send an approval notification to alice.johnson@email.com for claim CLM-001.",
+            "description": "Tests the notification agent's message generation for an approved claim outcome."
+        }
+    ]
+}

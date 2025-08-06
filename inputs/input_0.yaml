@@ -1,0 +1,14 @@
+id: valid_auto_claim
+description: Standard, fully complete automobile damage claim with all required details.
+input:
+  claimId: "CLM-001"
+  claimantInfo:
+    name: "Alice Johnson"
+    contact: "alice.johnson@email.com"
+  claimDetails:
+    policyNumber: "AUTO-123456"
+    incidentDescription: "Rear-ended at traffic lights. Police report attached."
+  paymentDetails:
+    paymentAmount: 2200.00
+    accountNumber: "1111222233334444"
+    routingNumber: "026009593"

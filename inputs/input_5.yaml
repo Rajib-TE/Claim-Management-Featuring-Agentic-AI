@@ -1,0 +1,12 @@
+id: duplicate_claim_submission
+description: Two claims submitted by the same claimant with identical details to test handling of duplicates.
+input:
+  - claimId: "CLM-006"
+    claimantInfo:
+      name: "Lucas Brown"
+      contact: "lucas.brown@email.com"
+    claimDetails:
+      policyNumber: "AUTO-321654"
+      incidentDescription: "Broken windshield from hailstorm."
+
+

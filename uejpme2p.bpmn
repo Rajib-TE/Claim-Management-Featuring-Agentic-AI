@@ -1,0 +1,267 @@
+<!-- 
+BPMN Diagram for Claims Management Process in the Financial Services Industry.
+This process covers the steps from initial claim receipt through registration, validation,
+assignment, investigation, decision-making (approval or rejection), claim payment (if approved),
+notification to the claimant, and final claim closure. Incomplete claims trigger a loop
+to request additional information before a claim can be further processed, ensuring compliance
+and accuracy in claims handling.
+-->
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  id="Definitions_ClaimsManagement"
+                  targetNamespace="http://example.com/bpmn">
+  <bpmn:process id="Claims_Management_Process" name="Claims Management Process" isExecutable="true">
+    
+    <bpmn:startEvent id="StartEvent_1" name="Claim Received">
+      <bpmn:outgoing>Flow_1</bpmn:outgoing>
+    </bpmn:startEvent>
+    
+    <bpmn:task id="Task_RegisterClaim" name="Register Claim">
+      <bpmn:incoming>Flow_1</bpmn:incoming>
+      <bpmn:outgoing>Flow_2</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:sequenceFlow id="Flow_1" sourceRef="StartEvent_1" targetRef="Task_RegisterClaim" />
+    
+    <bpmn:task id="Task_ValidateClaim" name="Validate Claim">
+      <bpmn:incoming>Flow_2</bpmn:incoming>
+      <bpmn:outgoing>Flow_3</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:sequenceFlow id="Flow_2" sourceRef="Task_RegisterClaim" targetRef="Task_ValidateClaim" />
+    
+    <bpmn:exclusiveGateway id="Gateway_ValidateClaim" name="Claim Validation Outcome">
+      <bpmn:incoming>Flow_3</bpmn:incoming>
+      <bpmn:outgoing>Flow_Invalid</bpmn:outgoing>
+      <bpmn:outgoing>Flow_Valid</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    
+    <bpmn:sequenceFlow id="Flow_3" sourceRef="Task_ValidateClaim" targetRef="Gateway_ValidateClaim" />
+    
+    <bpmn:task id="Task_RequestAdditionalInfo" name="Request Additional Info">
+      <bpmn:incoming>Flow_Invalid</bpmn:incoming>
+      <bpmn:outgoing>Flow_ReturnValidation</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:sequenceFlow id="Flow_Invalid" sourceRef="Gateway_ValidateClaim" targetRef="Task_RequestAdditionalInfo">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression"><![CDATA[claimIncomplete]]></bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    
+    <bpmn:sequenceFlow id="Flow_ReturnValidation" sourceRef="Task_RequestAdditionalInfo" targetRef="Task_ValidateClaim" />
+    
+    <bpmn:task id="Task_AssignClaimExaminer" name="Assign Claim to Examiner">
+      <bpmn:incoming>Flow_Valid</bpmn:incoming>
+      <bpmn:outgoing>Flow_AssignToInvestigation</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:sequenceFlow id="Flow_Valid" sourceRef="Gateway_ValidateClaim" targetRef="Task_AssignClaimExaminer">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression"><![CDATA[claimComplete]]></bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    
+    <bpmn:sequenceFlow id="Flow_AssignToInvestigation" sourceRef="Task_AssignClaimExaminer" targetRef="Task_InvestigateClaim" />
+    
+    <bpmn:task id="Task_InvestigateClaim" name="Investigate Claim">
+      <bpmn:incoming>Flow_AssignToInvestigation</bpmn:incoming>
+      <bpmn:outgoing>Flow_ToDecision</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:sequenceFlow id="Flow_ToDecision" sourceRef="Task_InvestigateClaim" targetRef="Gateway_ClaimDecision" />
+    
+    <bpmn:exclusiveGateway id="Gateway_ClaimDecision" name="Claim Decision">
+      <bpmn:incoming>Flow_ToDecision</bpmn:incoming>
+      <bpmn:outgoing>Flow_Approved</bpmn:outgoing>
+      <bpmn:outgoing>Flow_Rejected</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    
+    <bpmn:sequenceFlow id="Flow_Approved" sourceRef="Gateway_ClaimDecision" targetRef="Task_ProcessPayment">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression"><![CDATA[claimApproved]]></bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    
+    <bpmn:task id="Task_ProcessPayment" name="Process Payment">
+      <bpmn:incoming>Flow_Approved</bpmn:incoming>
+      <bpmn:outgoing>Flow_ApprovedNotify</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:sequenceFlow id="Flow_ApprovedNotify" sourceRef="Task_ProcessPayment" targetRef="Task_NotifyClaimantApproval" />
+    
+    <bpmn:task id="Task_NotifyClaimantApproval" name="Notify Claimant (Approval)">
+      <bpmn:incoming>Flow_ApprovedNotify</bpmn:incoming>
+      <bpmn:outgoing>Flow_MergeFromApproval</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:sequenceFlow id="Flow_Rejected" sourceRef="Gateway_ClaimDecision" targetRef="Task_NotifyClaimantRejection">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression"><![CDATA[claimRejected]]></bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    
+    <bpmn:task id="Task_NotifyClaimantRejection" name="Notify Claimant (Rejection)">
+      <bpmn:incoming>Flow_Rejected</bpmn:incoming>
+      <bpmn:outgoing>Flow_MergeFromRejection</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:exclusiveGateway id="Gateway_MergeDecision" name="Merge Decision">
+      <bpmn:incoming>Flow_MergeFromApproval</bpmn:incoming>
+      <bpmn:incoming>Flow_MergeFromRejection</bpmn:incoming>
+      <bpmn:outgoing>Flow_CloseClaim</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    
+    <bpmn:sequenceFlow id="Flow_MergeFromApproval" sourceRef="Task_NotifyClaimantApproval" targetRef="Gateway_MergeDecision" />
+    
+    <bpmn:sequenceFlow id="Flow_MergeFromRejection" sourceRef="Task_NotifyClaimantRejection" targetRef="Gateway_MergeDecision" />
+    
+    <bpmn:task id="Task_CloseClaim" name="Close Claim">
+      <bpmn:incoming>Flow_CloseClaim</bpmn:incoming>
+      <bpmn:outgoing>Flow_End</bpmn:outgoing>
+    </bpmn:task>
+    
+    <bpmn:sequenceFlow id="Flow_CloseClaim" sourceRef="Gateway_MergeDecision" targetRef="Task_CloseClaim" />
+    
+    <bpmn:endEvent id="EndEvent_1" name="Claim Completed">
+      <bpmn:incoming>Flow_End</bpmn:incoming>
+    </bpmn:endEvent>
+    
+    <bpmn:sequenceFlow id="Flow_End" sourceRef="Task_CloseClaim" targetRef="EndEvent_1" />
+  
+  </bpmn:process>
+  
+  <bpmndi:BPMNDiagram id="Diagram_ClaimsManagement">
+    <bpmndi:BPMNPlane id="Plane_ClaimsManagement" bpmnElement="Claims_Management_Process">
+      
+      <bpmndi:BPMNShape id="Shape_StartEvent_1" bpmnElement="StartEvent_1">
+        <dc:Bounds x="100" y="100" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Task_RegisterClaim" bpmnElement="Task_RegisterClaim">
+        <dc:Bounds x="180" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Task_ValidateClaim" bpmnElement="Task_ValidateClaim">
+        <dc:Bounds x="320" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Gateway_ValidateClaim" bpmnElement="Gateway_ValidateClaim">
+        <dc:Bounds x="480" y="95" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Task_RequestAdditionalInfo" bpmnElement="Task_RequestAdditionalInfo">
+        <dc:Bounds x="580" y="30" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Task_AssignClaimExaminer" bpmnElement="Task_AssignClaimExaminer">
+        <dc:Bounds x="580" y="110" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Task_InvestigateClaim" bpmnElement="Task_InvestigateClaim">
+        <dc:Bounds x="720" y="110" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Gateway_ClaimDecision" bpmnElement="Gateway_ClaimDecision">
+        <dc:Bounds x="880" y="125" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Task_ProcessPayment" bpmnElement="Task_ProcessPayment">
+        <dc:Bounds x="980" y="60" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Task_NotifyClaimantApproval" bpmnElement="Task_NotifyClaimantApproval">
+        <dc:Bounds x="1130" y="60" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Task_NotifyClaimantRejection" bpmnElement="Task_NotifyClaimantRejection">
+        <dc:Bounds x="980" y="180" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Gateway_MergeDecision" bpmnElement="Gateway_MergeDecision">
+        <dc:Bounds x="1240" y="110" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_Task_CloseClaim" bpmnElement="Task_CloseClaim">
+        <dc:Bounds x="1340" y="110" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Shape_EndEvent_1" bpmnElement="EndEvent_1">
+        <dc:Bounds x="1500" y="130" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_1" bpmnElement="Flow_1">
+        <di:waypoint x="136" y="118" />
+        <di:waypoint x="180" y="118" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_2" bpmnElement="Flow_2">
+        <di:waypoint x="280" y="118" />
+        <di:waypoint x="320" y="118" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_3" bpmnElement="Flow_3">
+        <di:waypoint x="420" y="118" />
+        <di:waypoint x="480" y="120" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_Invalid" bpmnElement="Flow_Invalid">
+        <di:waypoint x="505" y="120" />
+        <di:waypoint x="580" y="70" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_ReturnValidation" bpmnElement="Flow_ReturnValidation">
+        <di:waypoint x="680" y="70" />
+        <di:waypoint x="680" y="118" />
+        <di:waypoint x="320" y="118" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_Valid" bpmnElement="Flow_Valid">
+        <di:waypoint x="505" y="120" />
+        <di:waypoint x="580" y="150" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_AssignToInvestigation" bpmnElement="Flow_AssignToInvestigation">
+        <di:waypoint x="680" y="150" />
+        <di:waypoint x="720" y="150" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_ToDecision" bpmnElement="Flow_ToDecision">
+        <di:waypoint x="820" y="150" />
+        <di:waypoint x="880" y="150" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_Approved" bpmnElement="Flow_Approved">
+        <di:waypoint x="905" y="150" />
+        <di:waypoint x="980" y="100" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_ApprovedNotify" bpmnElement="Flow_ApprovedNotify">
+        <di:waypoint x="1080" y="100" />
+        <di:waypoint x="1130" y="100" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_Rejected" bpmnElement="Flow_Rejected">
+        <di:waypoint x="905" y="150" />
+        <di:waypoint x="980" y="220" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_MergeFromApproval" bpmnElement="Flow_MergeFromApproval">
+        <di:waypoint x="1230" y="100" />
+        <di:waypoint x="1240" y="135" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_MergeFromRejection" bpmnElement="Flow_MergeFromRejection">
+        <di:waypoint x="1080" y="220" />
+        <di:waypoint x="1240" y="135" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_CloseClaim" bpmnElement="Flow_CloseClaim">
+        <di:waypoint x="1290" y="135" />
+        <di:waypoint x="1340" y="135" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Edge_Flow_End" bpmnElement="Flow_End">
+        <di:waypoint x="1440" y="135" />
+        <di:waypoint x="1500" y="148" />
+      </bpmndi:BPMNEdge>
+      
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

@@ -1,0 +1,17 @@
+id: multi_stage_auto_claim_additional_info_then_approved
+description: Auto claim initially missing policy number, requests more info, gets completed, then approved and paid.
+input:
+  initial_claim_submission:
+    claimId: "CLM-004"
+    claimantInfo:
+      name: "Mohamed El Amin"
+      contact: "amin.mohamed@email.com"
+    claimDetails:
+      policyNumber: ""
+      incidentDescription: "Minor collision while parked."
+  additional_info_response:
+    policyNumber: "AUTO-009876"
+  paymentDetails:
+    paymentAmount: 500.00
+    accountNumber: "1234000043210000"
+    routingNumber: "011000138"

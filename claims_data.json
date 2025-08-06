@@ -1,0 +1,133 @@
+[
+  {
+    "id": "valid_auto_claim",
+    "description": "Standard, fully complete automobile damage claim with all required details.",
+    "input": {
+      "claimId": "CLM-001",
+      "claimantInfo": {
+        "name": "Alice Johnson",
+        "contact": "alice.johnson@email.com"
+      },
+      "claimDetails": {
+        "policyNumber": "AUTO-123456",
+        "incidentDescription": "Rear-ended at traffic lights. Police report attached."
+      },
+      "paymentDetails": {
+        "paymentAmount": 2200.0,
+        "accountNumber": "1111222233334444",
+        "routingNumber": "026009593"
+      }
+    }
+  },
+  {
+    "id": "incomplete_health_claim_missing_incident",
+    "description": "Health claim missing the incident description, triggering the request for additional info loop.",
+    "input": {
+      "claimId": "CLM-002",
+      "claimantInfo": {
+        "name": "Robert Smith",
+        "contact": "robert.smith@email.com"
+      },
+      "claimDetails": {
+        "policyNumber": "HEALTH-654321",
+        "incidentDescription": ""
+      }
+    }
+  },
+  {
+    "id": "rejected_home_claim_fraud_suspected",
+    "description": "Home insurance claim which, after investigation, leads to suspected fraud and rejection.",
+    "input": {
+      "claimId": "CLM-003",
+      "claimantInfo": {
+        "name": "Ella Martinez",
+        "contact": "ella.martinez@email.com"
+      },
+      "claimDetails": {
+        "policyNumber": "HOME-543210",
+        "incidentDescription": "Claim for water damage. No supporting documentation provided."
+      },
+      "investigationData": {
+        "evidenceSummary": "Inspection found no damage; claimant unable to provide photos or invoices.",
+        "notes": "Discrepancy between claimed damages and actual site visit."
+      }
+    }
+  },
+  {
+    "id": "multi_stage_auto_claim_additional_info_then_approved",
+    "description": "Auto claim initially missing policy number, requests more info, gets completed, then approved and paid.",
+    "input": {
+      "initial_claim_submission": {
+        "claimId": "CLM-004",
+        "claimantInfo": {
+          "name": "Mohamed El Amin",
+          "contact": "amin.mohamed@email.com"
+        },
+        "claimDetails": {
+          "policyNumber": "",
+          "incidentDescription": "Minor collision while parked."
+        }
+      },
+      "additional_info_response": {
+        "policyNumber": "AUTO-009876"
+      },
+      "paymentDetails": {
+        "paymentAmount": 500.0,
+        "accountNumber": "1234000043210000",
+        "routingNumber": "011000138"
+      }
+    }
+  },
+  {
+    "id": "payment_failure_claim",
+    "description": "Approved claim with payment details that will cause payment processing to fail (invalid account).",
+    "input": {
+      "claimId": "CLM-005",
+      "claimantInfo": {
+        "name": "Linda Wu",
+        "contact": "linda.wu@email.com"
+      },
+      "claimDetails": {
+        "policyNumber": "AUTO-999998",
+        "incidentDescription": "Fender bender, clear liability."
+      },
+      "paymentDetails": {
+        "paymentAmount": 350.0,
+        "accountNumber": "INVALID123",
+        "routingNumber": "XXXXXXX"
+      }
+    }
+  },
+  {
+    "id": "duplicate_claim_submission",
+    "description": "Two claims submitted by the same claimant with identical details to test handling of duplicates.",
+    "input": [
+      {
+        "claimId": "CLM-006",
+        "claimantInfo": {
+          "name": "Lucas Brown",
+          "contact": "lucas.brown@email.com"
+        },
+        "claimDetails": {
+          "policyNumber": "AUTO-321654",
+          "incidentDescription": "Broken windshield from hailstorm."
+        }
+      }
+    ]
+  },
+  {
+    "id": "auto_CLM-007",
+    "description": "Auto-added from runtime registration.",
+    "input": {
+      "claimId": "CLM-007",
+      "claimantInfo": {
+        "name": "Priya Menon",
+        "contact": "9988776655"
+      },
+      "claimDetails": {
+        "policyNumber": "AUTO-888111",
+        "incidentDescription": "I was rear-ended at a signal \u2014 my car bumper is damaged"
+      }
+    }
+  }
+]

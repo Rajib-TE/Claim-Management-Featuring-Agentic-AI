@@ -1,0 +1,10 @@
+id: incomplete_health_claim_missing_incident
+description: Health claim missing the incident description, triggering the request for additional info loop.
+input:
+  claimId: "CLM-002"
+  claimantInfo:
+    name: "Robert Smith"
+    contact: "robert.smith@email.com"
+  claimDetails:
+    policyNumber: "HEALTH-654321"
+    incidentDescription: ""

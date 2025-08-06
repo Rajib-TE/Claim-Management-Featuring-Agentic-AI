@@ -1,0 +1,14 @@
+id: payment_failure_claim
+description: Approved claim with payment details that will cause payment processing to fail (invalid account).
+input:
+  claimId: "CLM-005"
+  claimantInfo:
+    name: "Linda Wu"
+    contact: "linda.wu@email.com"
+  claimDetails:
+    policyNumber: "AUTO-999998"
+    incidentDescription: "Fender bender, clear liability."
+  paymentDetails:
+    paymentAmount: 350.00
+    accountNumber: "INVALID123"
+    routingNumber: "XXXXXXX"

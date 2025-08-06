@@ -1,0 +1,13 @@
+id: rejected_home_claim_fraud_suspected
+description: Home insurance claim which, after investigation, leads to suspected fraud and rejection.
+input:
+  claimId: "CLM-003"
+  claimantInfo:
+    name: "Ella Martinez"
+    contact: "ella.martinez@email.com"
+  claimDetails:
+    policyNumber: "HOME-543210"
+    incidentDescription: "Claim for water damage. No supporting documentation provided."
+  investigationData:
+    evidenceSummary: "Inspection found no damage; claimant unable to provide photos or invoices."
+    notes: "Discrepancy between claimed damages and actual site visit."
